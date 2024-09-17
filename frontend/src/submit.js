@@ -8,7 +8,8 @@ import { useState } from 'react';
 export const SubmitButton = () => {
     const adjacencyList = useStore((state) => state.adjacencyList);
     const [isSubmitting, setIsSubmitting] = useState(false); 
-    
+     
+    // console.log("backend url",process.env.REACT_APP_BACKEND_URL);
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
@@ -17,7 +18,7 @@ export const SubmitButton = () => {
           console.log("adjacencylistttt", adjacencyList);
 
 
-          const response = await fetch(`${process.env.BACKEND_URL}/pipelines/parse`, {
+          const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/pipelines/parse`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
