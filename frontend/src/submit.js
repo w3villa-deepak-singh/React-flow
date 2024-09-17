@@ -1,13 +1,13 @@
 // submit.js
 
 
-import { useStore } from './store'; // Import the store
+import { useStore } from './store'; 
 import { useState } from 'react';
 
 
 export const SubmitButton = () => {
-    const adjacencyList = useStore((state) => state.adjacencyList); // Get adjacency list from the store
-    const [isSubmitting, setIsSubmitting] = useState(false); // Track submission state
+    const adjacencyList = useStore((state) => state.adjacencyList);
+    const [isSubmitting, setIsSubmitting] = useState(false); 
     
 
     const handleSubmit = async () => {
@@ -17,12 +17,12 @@ export const SubmitButton = () => {
           console.log("adjacencylistttt", adjacencyList);
 
 
-          const response = await fetch('http://localhost:8000/pipelines/parse', {
+          const response = await fetch(`${process.env.BACKEND_URL}/pipelines/parse`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ adjacency_list: adjacencyList }), // Send adjacency list as JSON body
+            body: JSON.stringify({ adjacency_list: adjacencyList }), 
         });
 
         if (response.ok) {
@@ -63,7 +63,7 @@ export const SubmitButton = () => {
                 backgroundColor: 'rgb(28, 37, 54)',
                 color: 'white'
             }}
-            disabled={isSubmitting} // Disable button while submitting
+            disabled={isSubmitting} 
             onClick={handleSubmit}
             >
               {isSubmitting ? 'Submitting...' : 'Submit'}

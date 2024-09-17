@@ -10,15 +10,13 @@ app = FastAPI()
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # Allow requests from this origin
+    allow_origins=["http://localhost:3000"],  
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"],  
+    allow_headers=["*"],  
 )
 
-# Define the PipelineData model
-# class PipelineData(BaseModel):
-#     adjacency_list: Dict[str, List[str]]
+
 
 @app.get('/')
 def read_root():
@@ -28,18 +26,22 @@ def read_root():
 def parse_pipeline(data: PipelineData):
     pipeline = data.adjacency_list
     
-    # Step 1: Process the adjacency list
-    all_nodes = set(pipeline.keys())  # Start with the sources (keys of the adjacency list)
+    print(" pipeline (adjacencylist) in the graph:", pipeline)
+
+    # now process the adjacency list
+    all_nodes = set(pipeline.keys())  
     edges_count = 0
 
     for source, targets in pipeline.items():
-        edges_count += len(targets)  # Count the number of edges (source -> targets)
-        all_nodes.update(targets)    # Add all target nodes to the set
+        edges_count += len(targets) 
+        all_nodes.update(targets)   
 
-    # Step 2: Calculate number of nodes and edges
+    print("All nodes in the graph:", all_nodes)
+
+   
     nodes_count = len(all_nodes)
 
-    # Step 3: Check if the graph is a DAG
+    #   for the graph is a DAG or not
     is_dag = check_dag(pipeline)
 
     return {
@@ -51,8 +53,4 @@ def parse_pipeline(data: PipelineData):
     }
 
 
-
-# @app.get('/pipelines/parse')
-# def parse_pipeline(pipeline: str = Form(...)):
-#     return {'status': 'parsed'}
 
