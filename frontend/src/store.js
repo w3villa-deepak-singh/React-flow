@@ -65,7 +65,9 @@ import {
 export const useStore = create((set, get) => ({
     nodes: [],
     edges: [],
-    nodeIDs: {}, // Initialize nodeIDs to avoid undefined errors
+    nodeIDs: {}, // Initialize nodeIDs to avoid undefined 
+    adjacencyList: {}, // Initialize adjacency list
+
     getNodeID: (type) => {
         console.log('Calling getNodeID with type:', type);
         
@@ -101,7 +103,7 @@ export const useStore = create((set, get) => ({
     },
     onEdgesChange: (changes) => {
         console.log('Edges changes:', changes);
-        
+
         const updatedEdges = applyEdgeChanges(changes, get().edges);
         set({
             edges: updatedEdges,
@@ -130,6 +132,28 @@ export const useStore = create((set, get) => ({
         set({
             edges: updatedEdges,
         });
+       
+
+        // Step 2: Update the adjacency list
+        const { source, target } = connection; // Extract source and target from the connection
+        const currentAdjList = { ...get().adjacencyList }; // Get the current adjacency list
+
+           // If the source node doesn't exist in the adjacency list, initialize it
+        if (!currentAdjList[source]) {
+            currentAdjList[source] = [];
+        }
+        
+        // Add the target node to the source's list (if it's not already present)
+        if (!currentAdjList[source].includes(target)) {
+            currentAdjList[source].push(target);
+        }
+
+         // Update the adjacency list in the store
+         set({
+            adjacencyList: currentAdjList,
+        });
+
+        console.log('Updated adjacency list:', currentAdjList);
 
         console.log('Updated edges with new connection:', updatedEdges);
     },
