@@ -70,7 +70,7 @@
 import { useState } from 'react';
 import { Handle } from 'reactflow';
 
-export const BaseNode = ({ id, data, type, handles, fields }) => {
+export const BaseNode = ({ id, data, type, handles, fields,onFieldChange}) => {
    // 1. Initialize state for each field
   // We create an object called fieldStates to hold the value for each field
   const [fieldStates, setFieldStates] = useState(
@@ -87,7 +87,14 @@ export const BaseNode = ({ id, data, type, handles, fields }) => {
       ...prevState, // Keep the existing field values
       [fieldName]: newValue // Update the specific field
     }));
+
+      // Trigger parent component's onFieldChange function
+   if (onFieldChange) {
+    onFieldChange(fieldName, newValue);
+  }
+  
   };
+   
 
   // Check the current state of fields (for debugging or learning purposes)
   console.log("Current field states:", fieldStates);

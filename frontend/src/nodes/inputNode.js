@@ -51,7 +51,6 @@
 
 
 // inputNode.js
-
 import { BaseNode } from './baseNode';
 import { Position } from 'reactflow';
 
@@ -64,6 +63,7 @@ export const InputNode = ({ id, data }) => {
   const handles = [
     { id: `${id}-value`, type: 'source', position: Position.Right },
   ];
+
 
   return <BaseNode id={id} data={data} type="Input" fields={fields} handles={handles} />;
 };
