@@ -2,6 +2,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict
+from models import PipelineData
+from helper import check_dag
 
 app = FastAPI()
 
@@ -15,8 +17,8 @@ app.add_middleware(
 )
 
 # Define the PipelineData model
-class PipelineData(BaseModel):
-    adjacency_list: Dict[str, List[str]]
+# class PipelineData(BaseModel):
+#     adjacency_list: Dict[str, List[str]]
 
 @app.get('/')
 def read_root():
@@ -47,35 +49,6 @@ def parse_pipeline(data: PipelineData):
         "adjacency_list": pipeline,
         "is_dag": is_dag
     }
-
-def check_dag(graph: Dict[str, List[str]]) -> bool:
-    """ Check if the directed graph is a Directed Acyclic Graph (DAG). """
-    visited = set()
-    rec_stack = set()
-
-    def dfs(node: str) -> bool:
-        if node in rec_stack:
-            return False  # Cycle detected
-        if node in visited:
-            return True  # Already processed
-
-        visited.add(node)
-        rec_stack.add(node)
-
-        for neighbor in graph.get(node, []):
-            if not dfs(neighbor):
-                return False  # Cycle detected in recursion
-
-        rec_stack.remove(node)
-        return True
-
-    # Run DFS for each node to cover disconnected components
-    for node in graph:
-        if node not in visited:
-            if not dfs(node):
-                return False
-
-    return True
 
 
 
